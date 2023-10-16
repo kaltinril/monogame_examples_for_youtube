@@ -1,0 +1,120 @@
+Version Control Systems
+
+####################
+## What is it?!!? ##
+####################
+
+Short: A tool that lets you keep history of your code.
+
+Long:  A tool that tracks each version of a file over time,
+		allowing you to have infinite changes to your files
+		and always be able to reverse a change.
+
+Git was created by Linus Torvald in 2005 to assist with 
+building the Linux OS.  Others have added to it over the years
+
+https://www.atlassian.com/git/tutorials/what-is-version-control
+https://about.gitlab.com/topics/version-control/
+https://www.geeksforgeeks.org/version-control-systems/
+https://en.wikipedia.org/wiki/Git
+
+#####################
+## Different types ##
+#####################
+
+See the options to the left.
+Git, Subversion, etc....
+
+There are many options and ways to keep backups of versions. 
+You have probably already used a rudimentary form 
+of this already.  Making a copy of a file is one form.
+
+			filename.txt
+			filename_old.txt
+			filename_older.txt
+			filename_oldest.txt
+			filename_oldoldold.txt
+			filename_new.txt
+
+#######################
+## Issues/Questions: ##
+#######################
+ 1. Which is truely the new file?
+ 2. What is important about old or oldoldold that I kept it?
+ 3. What if I want to compare the changes between these files?
+ 4. What if I sent someone filename_old.txt, and they edit it?
+
+########################
+## Why does it matter ##
+########################
+
+Going back to a working copy of your code is important.
+
+You can be confident in making changes, testing out a new idea
+because worse case, you know you can reverse (revert) your
+changes back to a working copy of the source code.
+
+You can control version history
+Who changed a line of code
+Prevent conflicts (two people editing the same method)
+
+########################
+##   The git basics   ##
+########################
+
+https://www.atlassian.com/git/tutorials/using-branches
+
+1. How to create a new git repository
+	git init
+
+2. How to create a branch
+	git branch "new_branch_name"
+	
+	However, this only creates the branch, it does not 
+	change the current branch you are on.
+
+3. How to change the branch you are working on.
+	git checkout "new_branch_name"
+	
+	* Quotes are optional if no spaces are in the branch name
+	** I recommend avoiding spaces
+
+4. Create branch AND change to it at the same time
+	git checkout -b "new_branch_name"
+	
+	(This is a shortcut to do both steps 2 and 3)
+
+5. Tell git to start TRACKING your changes
+	git add filename-to-track.cs
+
+	** DANGER ** FILE IS NOT SAVED YET!!! **
+	This is just telling git that you want it to pay attention
+	to any changes to the file in the future, it's like
+	inventory, you're marking that you have this file (product)
+	That way, if the file is changed (sold/damaged/split) 
+	you can instantly know.
+	
+	At this point GIT is now aware you want to track changes
+	on this file, however, it is not yet monitoring for changes.
+	
+	It has also not yet SAVED anything!!! 
+	
+	For saving, see the next command.
+
+6. Tell git to save the changes to the tracked file
+	git commit -m "Your friendly explanation of code changes"
+
+7. Upload your changes/code/repository up to github
+	git push
+
+	I won't go too in-depth into this as you need to 
+	1. Create a github account
+	2. Create a repository
+	3. Push your code up to that repository
+
+8. Download someone else's code/repository
+	git clone https://link-to-repo.git
+	
+	Example: 
+	git clone https://github.com/kaltinril/olcGames.git
+
