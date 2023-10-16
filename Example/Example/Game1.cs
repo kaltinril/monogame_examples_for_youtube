@@ -13,6 +13,8 @@ namespace Example
         Vector2 characterPosition = new Vector2(100, 100);
         float characterSpeed = 150;
 
+        private SpriteFont font;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -33,6 +35,7 @@ namespace Example
 
             // TODO: use this.Content to load your game content here
             myCharacter = Content.Load<Texture2D>("arrow");
+            font = Content.Load<SpriteFont>("gameFont");
         }
 
         protected override void Update(GameTime gameTime)
@@ -91,9 +94,12 @@ namespace Example
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            Vector2 fontDrawPos = new Vector2(300, 200);
+
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
             _spriteBatch.Draw(myCharacter, characterPosition - new Vector2(myCharacter.Width /2, myCharacter.Height / 2), Color.White);
+            _spriteBatch.DrawString(font, "Hello World!", fontDrawPos, Color.Blue);
             _spriteBatch.End();
 
             base.Draw(gameTime);
