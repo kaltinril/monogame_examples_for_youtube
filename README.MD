@@ -6,13 +6,13 @@ https://www.monogame.net/
 
 Monogame is a library or framework that lets you use C# to create applications and games.  It creates a high level set of functions/procedures, classes, and frameworks so that you can focus more on your game, and less on the implementations.
 
-There is an abastraction layer, where you create your code, and then Monogame will be the one doing the hard work for each platform.
+There is an abstraction layer, where you create your code, and then Monogame will be the one doing the hard work for each platform.
 
 # Tutorials
 
 Going forward I'll leave the BRANCH for each tutorial in place instead of deleting them.  Branches for Tutorials 1, 2, and git are missing.
 
-## Tutorial 1: Installing Monogame, Visual Studio, and making your first project
+## 1) Tutorial 1: Installing Monogame, Visual Studio, and making your first project
 https://www.youtube.com/watch?v=Pu_Hi3ThVPs
 
  * Installing Visual Studio 2022
@@ -22,7 +22,7 @@ https://www.youtube.com/watch?v=Pu_Hi3ThVPs
  * High Level Blank Project Overview
 
 
-## Tutorial 2: Load, draw, and move an image.  Compile and run your program.
+## 2) Tutorial 2: Load, draw, and move an image.  Compile and run your program.
 https://www.youtube.com/watch?v=F5V7-7Z1d1I
 
 * Obtain an image
@@ -37,7 +37,7 @@ https://www.youtube.com/watch?v=F5V7-7Z1d1I
 * Restrict to Screen
 * Center Draw Position
 
-## Tutorial (Off-course 1): General coding - high level GIT info
+## OC1) Tutorial (Off-course 1): General coding - high level GIT info
 https://www.youtube.com/watch?v=_n_hoj0YLYE
 
 Quick video about Source Control Systems like GIT.
@@ -63,7 +63,7 @@ __General workflow of using git:__
  1. git push
 
 
-## Tutorial 3: Loading fonts and Drawing text
+## 3) Tutorial 3: Loading fonts and Drawing text
 https://www.youtube.com/watch?v=q2OESdgeoOI
 
 
@@ -95,10 +95,10 @@ https://www.youtube.com/watch?v=q2OESdgeoOI
 	
  2. Creating your own font
 	There are tools that let you create your own font.  
-	You could theoritically use this created font in your game.
+	You could theoretically use this created font in your game.
 	
  3. Build your own.
-	Realistcally, you could generate your own code to load
+	Realistically, you could generate your own code to load
 	an image in, with a NxN grid of letters that map to the
 	ASCII character codes if you want more control over your 
 	font drawing.
@@ -108,27 +108,131 @@ https://www.youtube.com/watch?v=q2OESdgeoOI
 ### 3.E) Links:
 https://docs.monogame.net/articles/content/using_mgcb_editor.html#fontsaddingttffontsmd
 
-## Tutorial 4: Loading and Playing Sounds/Music
+## 4) Tutorial 4: Loading and Playing Sounds/Music
 
-### Sounds and Music (Intro)
+### 4.A) Sounds and Music (Intro)
+Adding sound to a game adds an entire new feeling to the game.  A simple unfinished game will "Feel" 100 times better if it has sound and music.
 
-	asdf
-	asdf
-	
+There is and entire industry, department, and field about sound and audio theory.  I will not be approaching this from any of those areas.  This will be basic.
 
-### Generating sounds for free (not AI):
+Eventually you'll want to look into sound theory, positioning of sounds, merging sounds together when too many sounds are happening at the same time, and so much more.
+
+### 4.B) Generating sounds/Music for free (not AI):
+__SOUNDS:__
  * https://sfxr.me/
  * https://www.leshylabs.com/apps/sfMaker/
  * https://sfbgames.itch.io/chiptone
-
-### Adding sounds to your game.
-
- 1. Add to MGCB (Content Pipeline)
  
- 2. Load content in your game
+__MUSIC:__
+ * https://www.beepbox.co/
+
+### 4.C) Adding sounds to your game (Basic)
+
+ 1. Add sound file to your content directory
+    1. Add a folder under your content folder called "sounds"
+	1. Right-click the folder and those add existing item.  
+	1. Search for and find your sound file.
+ 1. Add to MGCB (Content Pipeline)
+    1. Open MGCB, right-click content and chose add -> existing file
+	1. Select your sound.
+	1. Save and BUILD the MGCB to validate no errors.
+ 1. Load content in your game
+    1. Add a variable to store the sound file.
 	
- 3. Play content
+			private SoundEffect laserEffect;
+		
+	1. Add a variable to store the master volume for sound effects.
+	
+			private float soundEffectVolumne = 0.25f;
+	
+	1. Load the sound file content via the content pipeline
+	
+			laserEffect = Content.Load<SoundEffect>(@"sounds\laserShoot");
+	
+ 1. Play Sound Effect
+ 	1. Add code to play the sound when the space bar is pressed
 
-### Links:
+			if (kstate.IsKeyDown(Keys.Space))
+			{
+				// Play the sound, at 25% volume, no pitch change, center balanced in the headphones/speaker
+				laserEffect.Play(soundEffectVolumne, 0.0f, 0.0f);
+			}
 
-https://docs.monogame.net/articles/content/using_mgcb_editor.html#audio
+### 4.D) Adding sounds to your game (Intermediate)
+This builds off the Basic steps above in 4.C) so go back and do those if you haven't yet.
+
+ 1. Setup content in your game
+    1. Add a variable to store the instance (You could also create this on-the-fly)
+	
+			private SoundEffectInstance laserEffectInstance;
+	
+	1. Create the instance from the loaded sound effect.
+	
+		laserEffectInstance = laserEffect.CreateInstance();
+	
+ 1. Play Sound Effect (Using Sound Effect Instance).
+ 
+		    if (kstate.IsKeyDown(Keys.I))
+            {
+                if (laserEffectInstance.State != SoundState.Playing)
+                {
+                    laserEffectInstance.Volume = soundEffectVolumne;
+                    laserEffectInstance.Play();
+                }
+            }
+			
+	   * This gives more control over the sound, things like:
+          * the virtual position in space it is played at (sound like its coming from above, below, behind, in front, left, or right)
+		  * when it's playing (checking state, pausing, stopping)
+       * See the links section for details on the SoundEffect class
+
+### 4.E) Adding music to your game (basic)
+
+We will use the basic MediaPlayer library/class to play music.
+
+ 1. Add music file to your content directory
+    1. Add a folder under your content folder called "music"
+	1. Right-click the folder and those add existing item.  
+	1. Search for and find your song/music file.
+ 1. Add to MGCB (Content Pipeline)
+    1. Open MGCB, right-click content and chose add -> existing file
+	1. Select your song/music.
+	1. Save and BUILD the MGCB to validate no errors.
+ 1. Load content in your game
+    1. Add a variable to store the music file.
+	
+			private Song song;
+	
+	1. Load the song/music file content via the content pipeline
+	
+			song = Content.Load<Song>(@"music\simpleSong");
+	
+ 1. Play Song
+ 	1. Add code to play the sound when the space bar is pressed
+
+            if (kstate.IsKeyDown(Keys.M))
+            {
+                if (MediaPlayer.State == MediaState.Playing)
+                {
+                    MediaPlayer.Stop();
+                }
+                else { 
+                    MediaPlayer.IsRepeating = true;
+                    MediaPlayer.Volume = soundEffectVolumne;
+                    MediaPlayer.Play(song);
+               }
+            }
+
+### 4.F) Links:
+ * https://docs.monogame.net/articles/content/using_mgcb_editor.html#audio
+ * https://docs.monogame.net/api/Microsoft.Xna.Framework.Audio.SoundEffect.html
+ * https://docs.monogame.net/api/Microsoft.Xna.Framework.Audio.SoundEffectInstance.html
+ * https://docs.monogame.net/api/Microsoft.Xna.Framework.Media.Song.html
+ * https://docs.monogame.net/api/Microsoft.Xna.Framework.Media.MediaPlayer.html
+
+### 4.G) Errors and Resolutions
+__Microsoft.Xna.Framework.Audio.NoAudioHardwareException__
+
+	Error Message: Microsoft.Xna.Framework.Audio.NoAudioHardwareException: 'OpenAL device could not be initialized, see console output for details.'
+	Error Details: I ran into this odd error when I was recording because I accidentally had the sound off on the remote computer.
+	Error Resolution: Make sure your computer has an audio device, and that isn't not disabled.
