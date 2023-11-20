@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 namespace Example
 {
@@ -14,6 +16,11 @@ namespace Example
         float characterSpeed = 150;
 
         private SpriteFont font;
+
+        private SoundEffect laserEffect;
+        private float soundEffectVolumne = 0.25f;
+        private SoundEffectInstance laserEffectInstance;
+        private Song song;
 
         public Game1()
         {
@@ -36,6 +43,9 @@ namespace Example
             // TODO: use this.Content to load your game content here
             myCharacter = Content.Load<Texture2D>("arrow");
             font = Content.Load<SpriteFont>("gameFont");
+            laserEffect = Content.Load<SoundEffect>(@"sounds\laserShoot");
+            laserEffectInstance = laserEffect.CreateInstance();
+            song = Content.Load<Song>(@"music\simpleSong");
         }
 
         protected override void Update(GameTime gameTime)
@@ -65,6 +75,35 @@ namespace Example
             if (kstate.IsKeyDown(Keys.Right))
             {
                 characterPosition.X += characterSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+
+            if (kstate.IsKeyDown(Keys.Space))
+            {
+                // Play the sound, at 25% volume, no pitch change, center balanced in the headphones/speaker
+                laserEffect.Play(soundEffectVolumne, 0.0f, 0.0f);
+            }
+
+            if (kstate.IsKeyDown(Keys.I))
+            {
+                if (laserEffectInstance.State != SoundState.Playing)
+                {
+                    laserEffectInstance.Volume = soundEffectVolumne;
+                    laserEffectInstance.Play();
+                }
+            }
+
+            if (kstate.IsKeyDown(Keys.M))
+            {
+                if (MediaPlayer.State == MediaState.Playing)
+                {
+                    MediaPlayer.Stop();
+                }
+                else
+                {
+                    MediaPlayer.IsRepeating = true;
+                    MediaPlayer.Volume = 1.0f;
+                    MediaPlayer.Play(song);
+                }
             }
 
             // Restrict the arrow to the screen
