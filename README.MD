@@ -168,7 +168,7 @@ This builds off the Basic steps above in 4.C) so go back and do those if you hav
 	
 	1. Create the instance from the loaded sound effect.
 	
-		laserEffectInstance = laserEffect.CreateInstance();
+			laserEffectInstance = laserEffect.CreateInstance();
 	
  1. Play Sound Effect (Using Sound Effect Instance).
  
