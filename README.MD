@@ -109,6 +109,7 @@ https://www.youtube.com/watch?v=q2OESdgeoOI
 https://docs.monogame.net/articles/content/using_mgcb_editor.html#fontsaddingttffontsmd
 
 ## 4) Tutorial 4: Loading and Playing Sounds/Music
+https://www.youtube.com/watch?v=gD_Bpj6kZaE
 
 ### 4.A) Sounds and Music (Intro)
 Adding sound to a game adds an entire new feeling to the game.  A simple unfinished game will "Feel" 100 times better if it has sound and music.
