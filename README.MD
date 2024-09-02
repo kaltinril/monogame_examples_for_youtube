@@ -237,3 +237,88 @@ __Microsoft.Xna.Framework.Audio.NoAudioHardwareException__
 	Error Message: Microsoft.Xna.Framework.Audio.NoAudioHardwareException: 'OpenAL device could not be initialized, see console output for details.'
 	Error Details: I ran into this odd error when I was recording because I accidentally had the sound off on the remote computer.
 	Error Resolution: Make sure your computer has an audio device, and that isn't not disabled.
+
+## 5) Tutorial 5: Updating Monogame from 3.8.1.303 to 3.8.2.1105 (.NET 6 to .NET 8)
+
+Monogame 3.8.2.1105 targets .NET 8.0.
+
+As of the time of writing this tutorial, the Monogame team hasn't been able to get the [Visual Studio Extension](https://marketplace.visualstudio.com/items?itemName=MonoGame.MonoGame-Templates-VSExtension) for the templates updated.  So the steps here are how to MANUALLY update to the newest version, or verify you have everything on the newest version.
+
+Once the templates get updated, you won't need to do any of the migration steps for any new project created from the template.
+
+### 5.A) Install .NET 8
+
+Visual Studio 2022 already has this installed by default so you shouldn't have to do anything to install this.
+
+If for some reason you are missing it, or if you're using a different tool, follow the official instructions here:
+ * https://docs.monogame.net/articles/getting_started/1_setting_up_your_os_for_development_windows.html?tabs=android#install-net-8-sdk
+
+### 5.B) Install the Monogame 3.8.2.1105 templates
+
+These are used whenever you generate a new project.  To prevent you from having to manually update the version of .NET and MonoGame in every new project, you'll need to manually update these.  Again, this is until Monogame Foundation resolves the issue with the extension.
+
+[MonoGame.Templates.CSharp](https://www.nuget.org/packages/MonoGame.Templates.CSharp)
+
+Run this in a command prompt from the project directory:
+`dotnet new install MonoGame.Templates.CSharp`
+
+This will actually install the NEWEST version, to target 3.8.2.1105 specifically (if you want) you can run this:
+`dotnet new install MonoGame.Templates.CSharp::3.8.2.1105`
+
+### 5.C) Migration: Update the .NET and MonoGame version
+
+There are two ways do to this, through Visual Studio 2022, and by manually editing the project configuration file.
+
+> **_STOP:_**  Do not perform these steps if you started with a new project after getting the updated templates, you should not need to edit anything.
+
+#### 5.C: VS2022)
+
+1. Open your solution in Visual Studio 2022
+1. Update Monogame version used
+   1. Go to the Menu item `Tools > NuGet Package Manager > Manage NuGet Packages for solution...`
+   1. In the tab/window that opens, go to the Updates tab, it should show 3.8.1.303 and 3.8.2.1105 below it.
+   ![Image showing the window after steps above are performed](images/nuget_package_manager.png)
+   1. Checkmark all Monogame Packages and click Update.  (In my solution thats these two)
+		```
+		MonoGame.Content.Builder.Task
+		MonoGame.Framework.DesktopGL
+		```
+   1. Close the NuGet Package Manager after it updates
+1. Update .NET version used
+	1. Right-click on your project in Visual Studio and chose Properties
+	1. In the Application tab that opens, on the general page, find the Target Framework and update it to .NET 8.0
+
+#### 5.C: Manual)
+
+1. Open the ProjectFile.csproj in a text editor. (where ProjectFile is the name of your project)
+1. Update MonoGame Version used
+	1. Find the PackageReference XML elements for MonoGame, and update their Version from 3.8.1.303 to 3.8.2.1105
+1. Update .NET Version used
+	1. Find the TargetFramework XML element node and change it from net6.0 to net8.0
+1. Save the file
+1. Open a command prompt in the directory and run
+	```
+	dotnet clean
+	dotnet restore
+	```
+
+### 5.D) Migration: Update the Tools (mgcb) to use 3.8.2.1105
+
+If you have an existing project that you want to update the tools versions of (The Content Pipline GUI), you'll need to follow these steps.
+
+This requires manually editing a JSON file in the hidden .config directory in your projects directory.
+
+> **_STOP:_**  Do not perform these steps if you started with a new project after getting the updated templates, you should not need to edit anything.
+
+1. Open the `dotnet-tools.json` file located here `./your-solution/your-project/.config/dotnet-tools.json` with a text editor.
+1. Find and replace all occurances of 3.8.1.303 with 3.8.2.1105
+1. Save and close the file
+1. Open a command prompt in the project directory and run `dotnet tool restore`
+1. You should see output like below
+```
+Tool 'dotnet-mgcb' (version '.8.2.1105') was restored. Available commands: mgcb
+Tool 'dotnet-mgcb-editor' (version '.8.2.1105') was restored. Available commands: mgcb-editor
+Tool 'dotnet-mgcb-editor-linux' (version '.8.2.1105') was restored. Available commands: mgcb-editor-linux
+Tool 'dotnet-mgcb-editor-windows' (version '.8.2.1105') was restored. Available commands: mgcb-editor-windows
+Tool 'dotnet-mgcb-editor-mac' (version '.8.2.1105') was restored. Available commands: mgcb-editor-mac
+```
